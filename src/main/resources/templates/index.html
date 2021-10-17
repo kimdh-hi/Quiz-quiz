@@ -11,16 +11,13 @@
 
     <!-- Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/static/js/index.js"></script>
 
-    <style>
-        .toggle_show {
-            display: none;
-        }
-    </style>
 </head>
 <body>
 <div style="margin: 100px 50px 100px 50px">
+    <div style="margin: 0 0 30px 30px">
+        <h1 onclick="window.location.href='/'">Home Page</h1>
+    </div>
     <div class="card text-center">
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills">
@@ -35,37 +32,7 @@
                 </li>
             </ul>
         </div>
-        <div class="card-body">
-            <h1 th:text="${auth}"></h1>
-            <button onclick="show_signin_form()" type="button" class="btn btn-light" style="height: 150px; width: 150px; font-size: 1.5em">회원가입</button>
-            <button onclick="show_signup_form()" type="button" class="btn btn-secondary" style="height: 150px; width: 150px; font-size: 1.5em">로그인</button>
-        </div>
     </div>
-
-    <form id="signin-form" class="toggle_show">
-        <div class="mb-3">
-            <label for="signin-email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="signin-email" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="signin-password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="signin-password">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-    <form id="signup-form" class="toggle_show">
-        <div class="mb-3">
-            <label for="signup-email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="signup-email" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
 </div>
 </body>
 </html>

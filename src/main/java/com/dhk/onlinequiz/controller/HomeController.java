@@ -16,20 +16,20 @@ public class HomeController {
     public String studentHome(Model model) {
         model.addAttribute("auth", "student");
 
-        return "index";
+        return "student/home";
     }
 
     @GetMapping("/teacher/home")
     public String teacherHome(Model model) {
         model.addAttribute("auth", "teacher");
 
-        return "index";
+        return "teacher/home";
     }
 
     @GetMapping("/admin/home")
     public String adminHome(Model model) {
         model.addAttribute("auth", "admin");
 
-        return "index";
+        return "admin/home";
     }
 }
