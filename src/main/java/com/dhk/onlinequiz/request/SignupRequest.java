@@ -14,4 +14,6 @@ public class SignupRequest {
     private String password;
     private String schoolName;
     private int grade;
+
+    private boolean teacher;
 }
