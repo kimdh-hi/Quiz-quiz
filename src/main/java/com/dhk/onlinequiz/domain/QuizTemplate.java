@@ -28,5 +28,5 @@ public class QuizTemplate {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private User teacher;
 }

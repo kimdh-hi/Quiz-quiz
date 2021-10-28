@@ -11,6 +11,13 @@
 
     <!-- Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
 
     <style>
         .toggle_show {
@@ -27,6 +34,47 @@
         function show_signup_form() {
             $("#signin-form").addClass("toggle_show")
             $("#signup-form").toggleClass("toggle_show")
+        }
+
+        function toggle_school_select_modal() {
+            $('#school-select-box').empty()
+
+            $('#school-select-button-modal').text("학교조회")
+
+            $('#school-select-modal').modal('show')
+        }
+
+        // 회원가입시 선택된 학교정보를 서버로 전달
+        // 서버는 해당 학교정보에 해당하는 정보를 리스트로 응답
+        // 응답받은 학교 리스트 중 클라이언트가 학교를 선택하도록 한다.
+        function send_school_info() {
+
+            let button_text = $("#school-select-button-modal").text()
+
+            $('#school-select-radio-box').empty()
+            name = $('#school-name-input').val()
+            region = $('#school-region-select').val()
+            type = $('#school-type-select').val()
+
+            $.ajax({
+                type: "GET",
+                url: `/api/signup/school?name=${name}&region=${region}&type=${type}`,
+                success: function(res) {
+                    $('#school-select-button-modal').text("다시조회")
+                    for (let i=0;i<res.length;i++) {
+                        let schoolName = res[i].schoolName
+                        let address = res[i].address
+                        let tmp_html = `<div><span style="font-weight: bold" onclick="select_school_complete('${schoolName}', '${address}')">${schoolName}</span> &nbsp;&nbsp; <span>${address}</span></div`
+                        $('#school-select-box').append(tmp_html)
+                    }
+                }
+            })
+        }
+
+        function select_school_complete(schoolName, address) {
+            console.log(schoolName, address)
+
+
         }
     </script>
 </head>
@@ -60,7 +108,7 @@
     </div>
 
     <!-- =============== 로그인 폼 =============== -->
-    <form id="signin-form" class="toggle_show">
+    <form id="signin-form" class="toggle_show" style="margin-top: 30px">
         <h2>Signin</h2>
         <div class="mb-3">
             <label for="signin-email" class="form-label">Email address</label>
@@ -74,7 +122,7 @@
     </form>
 
     <!-- =============== 회원기입 폼 =============== -->
-    <form id="signup-form" class="toggle_show">
+    <form id="signup-form" class="toggle_show" style="margin-top: 30px">
         <h2>Signup</h2>
         <div class="mb-3">
             <label for="signup-name" class="form-label">Name</label>
@@ -88,9 +136,79 @@
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1">
         </div>
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="toggle_school_select_modal()">
+                학교조회
+            </button>
+        </div>
+
+        <!-- 선택된 학교정보 -->
+        <div id="selected-school-info">
+
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
 
+<!-- 학교선택 모달 폼-->
+<div class="modal fade" id="school-select-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">학교 선택</h4>
+            </div>
+            <div class="modal-body">
+
+                <!-- 학교 종류 선택-->
+                <select id="school-type-select" class="form-select mb-3" aria-label="Default select example">
+                    <option selected>학교 종류</option>
+                    <option value="elem_list">초등학교</option>
+                    <option value="midd_list">중학교</option>
+                    <option value="high_list">고등학교</option>
+                    <option value="univ_list">대학교</option>
+                </select>
+
+                <!-- 학교 지역 선택-->
+                <select id="school-region-select" class="form-select mb-3" aria-label="Default select example" style="margin-top: 10px">
+                    <option selected>지역</option>
+                    <option value="100276">경기도</option>
+                    <option value="100260">서울특별시</option>
+                    <option value="100267">부산광역시</option>
+                    <option value="100269">인천광역시</option>
+                    <option value="100271">대전광역시</option>
+                    <option value="100272">대구광역시</option>
+                    <option value="100273">울산광역시</option>
+                    <option value="100275">광주광역시</option>
+                    <option value="100278">강원도</option>
+                    <option value="100280">충청북도</option>
+                    <option value="100281">충청남도</option>
+                    <option value="100282">전라북도</option>
+                    <option value="100283">전라남도</option>
+                    <option value="100285">경상북도</option>
+                    <option value="100291">경상남도</option>
+                    <option value="100292">제주도</option>
+                </select>
+
+                <!-- 학교 이름 선택 -->
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">학교이름</span>
+                    <input id="school-name-input" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <!-- 학교선택 -->
+                <div id="school-select-box">
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer" id="school-select-model-footer">
+                <button id="school-select-button-modal" onclick="send_school_info()" type="button" class="btn btn-primary">학교조회</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -13,7 +13,7 @@ import javax.persistence.IdClass;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@IdClass(Authority.class)
+@IdClass(Authority.class) // 동일한 권한이 부여되지 않도록 슈퍼키로 구성
 public class Authority implements GrantedAuthority {
 
     private final String ROLE_GUEST = "ROLE_GUEST";
